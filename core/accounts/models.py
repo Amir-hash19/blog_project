@@ -49,3 +49,20 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+    
+
+
+
+
+class Profile(models.Model):
+    user = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=250)
+    last_name = models.CharField(max_length=250)
+    image = models.ImageField(null=True, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    bio = models.TextField()
+    last_login = models.DateTimeField(auto_now=True)
+
+
+    def __str__(self):
+        return f"{self.first_name}-{self.last_name}"
