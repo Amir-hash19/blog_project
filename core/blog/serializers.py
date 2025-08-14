@@ -21,3 +21,12 @@ class PostSerializer(serializers.ModelSerializer):
             return f"{profile.first_name} {profile.last_name}"
         except Profile.DoesNotExist:
             return obj.author.email
+
+
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ["id", "name"]
+        
