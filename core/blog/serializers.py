@@ -35,6 +35,11 @@ class PostSerializer(serializers.ModelSerializer):
         return relative_url
 
 
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep["category"] = CategorySerializer(instance.category).data
+        rep.pop('snippet', None)
+        return rep
 
 
 class CategorySerializer(serializers.ModelSerializer):
