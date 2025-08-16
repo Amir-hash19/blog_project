@@ -5,9 +5,13 @@ from .models import Post, Category
 from .serializers import PostSerializer, CategorySerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
-
-
-
+from .permissions import IsOwnerOrReadOnly
+from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework.views import APIView
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
+from rest_framework.filters import SearchFilter, OrderingFilter
+from .paginations import DefaultPagination
 
 
 class PostViewset(viewsets.ViewSet):
@@ -58,9 +62,25 @@ class PostViewset(viewsets.ViewSet):
 
 
 class CategoryModelViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly
+                        ]
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
+
+
+
+class PostModelViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly,
+                        IsOwnerOrReadOnly]
+    serializer_class = PostSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    search_fields = ["=title", "content"]
+    filterset_fields = ["category", "author", "status"]
+    ordering_fields = ["published_date"]
+    ordering = ["-published_date"] 
+    pagination_class = DefaultPagination
+    queryset = Post.objects.all()
+
 
 
 
