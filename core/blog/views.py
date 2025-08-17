@@ -18,7 +18,7 @@ class PostViewset(viewsets.ViewSet):
     permission_classes = [AllowAny]
     serializer_class = PostSerializer
     queryset = Post.objects.all()
-
+ 
     def list(self, request):
         serializer = self.serializer_class(self.queryset, many=True)
         return Response(serializer.data)
@@ -42,8 +42,6 @@ class PostViewset(viewsets.ViewSet):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        
 
     def partial_update(self, request, pk=None):
         post_object = get_object_or_404(self.queryset, pk=pk)

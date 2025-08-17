@@ -36,6 +36,7 @@ def profiledetail(request, id):
     profile = get_object_or_404(Profile,pk=id,status=True)
     if request.method == "GET":
         serializer = ProfileSerializer(profile)
+        serializer.is_valid(raise_exception=True)
         return Response(serializer.data)
     elif request.method == "PUT":
         serializer = ProfileSerializer(profile, data=request.data)
