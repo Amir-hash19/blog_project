@@ -1,5 +1,7 @@
 from django.urls import path
-from .views import RegistrationAPIVeiw, CustomTokenObtainPairView, ChangePasswordApiView, ProfileApiView, TestEmailSend
+from .views import( RegistrationAPIVeiw, CustomTokenObtainPairView,
+                ChangePasswordApiView, ProfileApiView, TestEmailSend,
+                ActivationApiView)
 
 
 urlpatterns = [
@@ -16,5 +18,6 @@ urlpatterns = [
 
 
     #test email
-    path("activation/confirm/", TestEmailSend.as_view())
+    path("activation/confirm/email/", TestEmailSend.as_view()),
+    path("activation/confirm/", ActivationApiView.as_view()),
 ]

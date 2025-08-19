@@ -9,7 +9,11 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from django.shortcuts import get_object_or_404
 from rest_framework.generics import RetrieveUpdateAPIView
 from django.core.mail import send_mail
-    
+from .utils.send_email import EmailThread    
+from rest_framework.views import APIView
+from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
+from django.conf import settings
+import jwt
 
 
 class RegistrationAPIVeiw(generics.GenericAPIView):
@@ -78,15 +82,42 @@ class ProfileApiView(RetrieveUpdateAPIView):
 class TestEmailSend(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
-        send_mail(
+        email_obj = send_mail(
             'subject here',
             'Send Node :)',
             'from@example.com',
             ["to@example.com"],
             fail_silently=False
         )
+
+    
+        EmailThread(email_obj).start()
+
         return Response("email sent")
 
+
+
+
+
+
+class ActivationApiView(APIView):
+
+    def get(self, request, *args, **kwargs):
+        token = request.query_params.get("token")
+        try:
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+            user_id = payload.get("user_id")
+        except jwt.ExpiredSignatureError:
+            return Response({"error": "Activation link has expired"}, status=status.HTTP_400_BAD_REQUEST)
+        except jwt.InvalidTokenError:
+            return Response({"error": "Invalid activation link"}, status=status.HTTP_400_BAD_REQUEST)
+        user_obj = CustomUser.objects.get(pk=user_id)
+        if user_obj.is_verified:
+            return Response({"error": "Account is already activated"}, status=status.HTTP_400_BAD_REQUEST)
+
+        user_obj.is_verified = True
+        user_obj.save()
+        return Response({"detail": "Account activated successfully"}, status=status.HTTP_200_OK)
 
 
 
