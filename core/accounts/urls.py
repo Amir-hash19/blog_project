@@ -15,6 +15,6 @@ urlpatterns = [
 
 
 
-
+    #test email
     path("activation/confirm/", TestEmailSend.as_view())
 ]

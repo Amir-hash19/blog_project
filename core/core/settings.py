@@ -165,3 +165,16 @@ REST_FRAMEWORK = {"DEFAULT_SCHEMA_CLASS":"rest_framework.schemas.coreapi.AutoSch
 # settings.py
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+
+
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = "smtp4dev"
+EMAIL_PORT = 25
+EMAIL_USE_TLS = False
+
+EMAIL_HOST_USER = ""       # ایمیل جیمیل
+EMAIL_HOST_PASSWORD = ""      # پسورد اپلیکیشن (نه پسورد اکانت اصلی)
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

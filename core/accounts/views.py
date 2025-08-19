@@ -80,9 +80,14 @@ class TestEmailSend(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         send_mail(
             'subject here',
-            'here is the messgae',
+            'Send Node :)',
             'from@example.com',
             ["to@example.com"],
             fail_silently=False
         )
         return Response("email sent")
+
+
+
+
+
