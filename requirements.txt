@@ -4,3 +4,4 @@ pillow
 djangorestframework
 django-filter
 drf-yasg[validation]
+djangorestframework-simplejwt
