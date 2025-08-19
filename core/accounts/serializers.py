@@ -71,10 +71,11 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 
 class ProfileSerializer(serializers.Serializer):
-    email = serializers.CharField(source="user.email")
+    email = serializers.CharField(source="user.email", read_only=True)
 
 
     class Meta:
         model = Profile
         fields = ["email", "first_name", 
                 "last_name", "image", "bio", "date_created"]
+        read_only_fields = ["email"]

@@ -162,3 +162,6 @@ REST_FRAMEWORK = {"DEFAULT_SCHEMA_CLASS":"rest_framework.schemas.coreapi.AutoSch
 
 
 
+# settings.py
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

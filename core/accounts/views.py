@@ -7,8 +7,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.shortcuts import get_object_or_404
-from rest_framework.generics import RetrieveAPIView
-
+from rest_framework.generics import RetrieveUpdateAPIView
+from django.core.mail import send_mail
     
 
 
@@ -62,7 +62,7 @@ class ChangePasswordApiView(generics.GenericAPIView):
 
 
 
-class ProfileApiView(RetrieveAPIView):
+class ProfileApiView(RetrieveUpdateAPIView):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
     permission_classes = [IsAuthenticated]
@@ -70,3 +70,19 @@ class ProfileApiView(RetrieveAPIView):
 
     def get_object(self):
         return self.request.user.profile
+
+
+
+
+
+class TestEmailSend(generics.GenericAPIView):
+
+    def get(self, request, *args, **kwargs):
+        send_mail(
+            'subject here',
+            'here is the messgae',
+            'from@example.com',
+            ["to@example.com"],
+            fail_silently=False
+        )
+        return Response("email sent")
