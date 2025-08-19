@@ -50,7 +50,9 @@ class ChangePasswordSerializer(serializers.Serializer):
         try:
             validate_password(attrs.get("new_password"))
         except exceptions.ValidationError as e:
-            raise serializers.ValidationError({"new_password": list(e.messages)})
+            raise serializers.ValidationError(
+                {"new_password": list(e.messages)}
+            )
 
         return super().validate(attrs)
 
@@ -60,5 +62,12 @@ class ProfileSerializer(serializers.Serializer):
 
     class Meta:
         model = Profile
-        fields = ["email", "first_name", "last_name", "image", "bio", "date_created"]
+        fields = [
+            "email",
+            "first_name",
+            "last_name",
+            "image",
+            "bio",
+            "date_created",
+        ]
         read_only_fields = ["email"]

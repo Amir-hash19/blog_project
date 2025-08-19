@@ -50,7 +50,9 @@ class PostViewset(viewsets.ViewSet):
 
     def partial_update(self, request, pk=None):
         post_object = get_object_or_404(self.queryset, pk=pk)
-        serializer = self.serializer_class(post_object, data=request.data, partial=True)
+        serializer = self.serializer_class(
+            post_object, data=request.data, partial=True
+        )
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)

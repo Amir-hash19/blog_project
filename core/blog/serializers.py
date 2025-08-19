@@ -11,9 +11,13 @@ class PostSerializer(serializers.ModelSerializer):
         queryset=Category.objects.all(), slug_field="name"
     )
     snippet = serializers.ReadOnlyField(source="get_snippet")
-    relative_url = serializers.URLField(source="get_absolute_api_url", read_only=True)
+    relative_url = serializers.URLField(
+        source="get_absolute_api_url", read_only=True
+    )
     absolute_url = serializers.SerializerMethodField()
-    author_email = serializers.EmailField(source="author.email", read_only=True)
+    author_email = serializers.EmailField(
+        source="author.email", read_only=True
+    )
 
     class Meta:
         model = Post
@@ -51,7 +55,9 @@ class PostSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         rep = super().to_representation(instance)
         request = self.context.get("request")
-        parser_context = getattr(request, "parser_context", {}) if request else {}
+        parser_context = (
+            getattr(request, "parser_context", {}) if request else {}
+        )
         kwargs = parser_context.get("kwargs", {})
 
         if kwargs.get("pk"):

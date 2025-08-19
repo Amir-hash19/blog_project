@@ -6,3 +6,5 @@ django-filter
 drf-yasg[validation]
 djangorestframework-simplejwt
 coreapi
+black
+flacke8

@@ -55,7 +55,9 @@ class ChangePasswordApiView(generics.GenericAPIView):
         self.object = self.get_object()
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            if not self.object.check_password(serializer.data.get("old_password")):
+            if not self.object.check_password(
+                serializer.data.get("old_password")
+            ):
                 return Response(
                     {"old_password": ["Wrong password"]},
                     status=status.HTTP_400_BAD_REQUEST,
@@ -63,7 +65,8 @@ class ChangePasswordApiView(generics.GenericAPIView):
             self.object.set_password(serializer.data.get("new_password"))
             self.object.save()
             return Response(
-                {"details": "password changed successfully"}, status=status.HTTP_200_OK
+                {"details": "password changed successfully"},
+                status=status.HTTP_200_OK,
             )
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -99,7 +102,9 @@ class ActivationApiView(APIView):
     def get(self, request, *args, **kwargs):
         token = request.query_params.get("token")
         try:
-            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+            payload = jwt.decode(
+                token, settings.SECRET_KEY, algorithms=["HS256"]
+            )
             user_id = payload.get("user_id")
         except jwt.ExpiredSignatureError:
             return Response(
@@ -108,7 +113,8 @@ class ActivationApiView(APIView):
             )
         except jwt.InvalidTokenError:
             return Response(
-                {"error": "Invalid activation link"}, status=status.HTTP_400_BAD_REQUEST
+                {"error": "Invalid activation link"},
+                status=status.HTTP_400_BAD_REQUEST,
             )
         user_obj = CustomUser.objects.get(pk=user_id)
         if user_obj.is_verified:
@@ -120,5 +126,6 @@ class ActivationApiView(APIView):
         user_obj.is_verified = True
         user_obj.save()
         return Response(
-            {"detail": "Account activated successfully"}, status=status.HTTP_200_OK
+            {"detail": "Account activated successfully"},
+            status=status.HTTP_200_OK,
         )
