@@ -4,7 +4,12 @@ from rest_framework import status, viewsets
 from .models import Post, Category
 from .serializers import PostSerializer, CategorySerializer
 from django.shortcuts import get_object_or_404
-from rest_framework.permissions import IsAdminUser, IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
+from rest_framework.permissions import (
+    IsAdminUser,
+    IsAuthenticated,
+    IsAuthenticatedOrReadOnly,
+    AllowAny,
+)
 from .permissions import IsOwnerOrReadOnly
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.views import APIView
@@ -18,16 +23,16 @@ class PostViewset(viewsets.ViewSet):
     permission_classes = [AllowAny]
     serializer_class = PostSerializer
     queryset = Post.objects.all()
- 
+
     def list(self, request):
         serializer = self.serializer_class(self.queryset, many=True)
         return Response(serializer.data)
-    
+
     def retrieve(self, request, pk=None):
         post_object = get_object_or_404(self.queryset, pk=pk)
         serializer = self.serializer_class(post_object)
         return Response(serializer.data)
-    
+
     def create(self, request):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
@@ -56,30 +61,20 @@ class PostViewset(viewsets.ViewSet):
         post_object.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-        
-
 
 class CategoryModelViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticatedOrReadOnly
-                        ]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
 
 
-
 class PostModelViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticatedOrReadOnly,
-                        IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     serializer_class = PostSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     search_fields = ["=title", "content"]
     filterset_fields = ["category", "author", "status"]
     ordering_fields = ["published_date"]
-    ordering = ["-published_date"] 
+    ordering = ["-published_date"]
     pagination_class = DefaultPagination
     queryset = Post.objects.all()
-
-
-
-
-

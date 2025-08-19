@@ -2,6 +2,7 @@ from django.db import models
 from accounts.models import CustomUser
 from django.urls import reverse
 
+
 class Post(models.Model):
     image = models.ImageField(null=True, blank=True)
     title = models.CharField(max_length=250)
@@ -12,19 +13,16 @@ class Post(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-    published_date = models.DateTimeField() 
-
+    published_date = models.DateTimeField()
 
     def get_snippet(self):
         return self.content[0:10]
-    
+
     def get_absolute_api_url(self):
         return reverse("post-detail", kwargs={"pk": self.pk})
-    
 
     def __str__(self):
         return self.title
-
 
 
 class Category(models.Model):
@@ -32,4 +30,3 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
-    
